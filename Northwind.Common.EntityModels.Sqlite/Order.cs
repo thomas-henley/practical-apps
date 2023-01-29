@@ -22,7 +22,7 @@ namespace Northwind.Common
         }
 
         [Key]
-        public long OrderId { get; set; }
+        public int OrderId { get; set; }
         
         [Column(TypeName = "nchar (5)")]
         [StringLength(5)]
