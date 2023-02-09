@@ -3,11 +3,29 @@
 @{
   ViewData["Title"] = "Home Page";
   string currentItem = "";
+  WeatherForecast[]? weather = ViewData["weather"] as WeatherForecast[];
 }
 <div class="text-center">
   <h1 class="display-4">Welcome</h1>
   <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
   <p class="alert alert-primary">@DateTime.Now.ToLongTimeString()</p>
+  <p>
+    <h4>Five-Day Weather Forecast</h4>
+    @if ((weather is null) || (!weather.Any()))
+    {
+      <p>No weather forecasts found.</p>
+    }
+    else
+    {
+      <table class="table table-info">
+        <tr>
+          @foreach (WeatherForecast w in weather)
+          {
+            <td>@w.Date.ToString("ddd d MMM") will be @w.Summary</td>
+          }
+        </tr>
+      </table>
+    }
 </div>
 @if (Model is not null)
 {
@@ -73,6 +91,12 @@
     <p class="lead">
       We have had @Model?.VisitorCount visitors this month.
     </p>
+    
+    <h3>Query customers from a service</h3>
+    <form asp-action="Customers" method="get">
+      <input name="country" placeholder="Enter a country" />
+      <input type="submit" />
+    </form>
     
     <h2>Query products by price</h2>
     <form asp-action="ProductsThatCostMoreThan" method="GET">

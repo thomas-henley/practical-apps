@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Northwind.Mvc.Data;
 using Northwind.Common;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,22 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddNorthwindContext();
+
+builder.Services.AddHttpClient(name: "Northwind.WebApi",
+    configureClient: options =>
+    {
+        options.BaseAddress = new Uri("https://localhost:5002/");
+        options.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue(
+                "application/json", 1.0));
+    });
+
+builder.Services.AddHttpClient(name: "Minimal.WebApi",
+    configureClient: options =>
+    {
+        options.BaseAddress = new Uri("https://localhost:5003/");
+        options.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json", 1.0));
+    });
 
 var app = builder.Build();
 
